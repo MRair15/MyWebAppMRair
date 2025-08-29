@@ -36,7 +36,7 @@ document.getElementById('submitBtn').onclick = function () {
     };
 
     // Отправляем на Google Apps Script
-    fetch('https://script.google.com/macros/s/AKfycbxcCgXAsnW0tEd9qXqXA-ns4NkRPM6DyXRWmej3Taj5yG8SCDRKAqzO3h9gMhO6jsYZnQ/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbwFUOAnvIbp26og6nRti0OqEfH6yFMQJbUp5DopyfbbEzNOjQ-cqbHXVmmHz4YAGjvV/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: {
