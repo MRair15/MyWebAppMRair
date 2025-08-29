@@ -1,9 +1,8 @@
-// Инициализация Telegram WebApp
 const tg = window.Telegram?.WebApp;
 
 if (tg) {
     tg.ready();
-    tg.expand(); // раскрыть на весь экран
+    tg.expand();
 }
 
 // Установка минимальной даты — сегодня
@@ -19,30 +18,41 @@ document.getElementById('submitBtn').onclick = function () {
     const phone = document.getElementById('phone').value.trim();
 
     if (!name || !phone || !date) {
-        alert('Пожалуйста, заполните все поля');
+        tg.showAlert('Заполните все поля!');
         return;
     }
 
-    // Формируем данные
+    // Показываем индикатор загрузки
+    tg.showPopup({ title: 'Отправка...', message: 'Ждите...' });
+
     const data = {
+        name,
+        phone,
         service,
         master,
         date,
         time,
-        name,
-        phone,
         telegram_user: tg.initDataUnsafe.user?.username || 'не указан'
     };
 
-    // Отправляем в бота
-    tg.sendData(JSON.stringify(data));
-
-    // Показываем успех
-    document.querySelector('.form').classList.add('hidden');
-    document.getElementById('success').classList.remove('hidden');
+    // Отправляем на Google Apps Script
+    fetch('https://script.google.com/macros/s/AKfycbxcCgXAsnW0tEd9qXqXA-ns4NkRPM6DyXRWmej3Taj5yG8SCDRKAqzO3h9gMhO6jsYZnQ/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(() => {
+        document.querySelector('.form').classList.add('hidden');
+        document.getElementById('success').classList.remove('hidden');
+    })
+    .catch(err => {
+        tg.showAlert('Ошибка отправки. Попробуйте позже.');
+    });
 };
 
-// Закрыть Mini App
 function closeApp() {
     tg.close();
 }
